@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ardi-redact-cli"
+version = "0.1.0"
+description = "Local, format-preserving PII redaction for documents and subtitles"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+  "typer>=0.16,<1",
+  "spacy>=3.8.14,<3.9",
+  "python-docx>=1.2,<2",
+  "lxml>=6,<7",
+  "phonenumbers>=9,<10",
+]
+
+[project.scripts]
+ard-redact = "ard_redact_cli.cli:app"
+
+[dependency-groups]
+dev = ["ruff>=0.12", "pyright>=1.1.400", "pytest>=8", "types-lxml>=2025.3.30"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ard_redact_cli"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+indent-width = 2
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.12"
+include = ["src", "tests"]
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
