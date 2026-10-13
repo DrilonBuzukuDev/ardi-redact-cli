@@ -6,10 +6,10 @@ from typing import Annotated
 
 import typer
 
-from ard_redact_cli.detection import Detector
-from ard_redact_cli.formats import SUPPORTED
-from ard_redact_cli.models import install_model, load_model
-from ard_redact_cli.processing import process_file
+from ardi_redact_cli.detection import Detector
+from ardi_redact_cli.formats import SUPPORTED
+from ardi_redact_cli.models import install_model, load_model
+from ardi_redact_cli.processing import process_file
 
 app = typer.Typer(add_completion=False, pretty_exceptions_enable=False)
 

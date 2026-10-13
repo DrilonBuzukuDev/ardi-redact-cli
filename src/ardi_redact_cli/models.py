@@ -38,5 +38,5 @@ def load_model(name: str) -> Language:
     return spacy.load(name)
   except OSError:
     raise ValueError(
-      "spaCy model unavailable. Install it with ard-redact --install-model --model " + name
+      "spaCy model unavailable. Install it with ardi-redact --install-model --model " + name
     ) from None

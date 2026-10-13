@@ -4,7 +4,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 
-from ard_redact_cli.detection import PLACEHOLDER_PATTERN, Category, Detection
+from ardi_redact_cli.detection import PLACEHOLDER_PATTERN, Category, Detection
 
 
 @dataclass

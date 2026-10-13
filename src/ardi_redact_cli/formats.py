@@ -12,8 +12,8 @@ from docx import Document
 from lxml import etree
 from lxml.etree import _Element as XmlElement  # pyright: ignore[reportPrivateUsage]
 
-from ard_redact_cli.detection import PLACEHOLDER_PATTERN
-from ard_redact_cli.redaction import TextUnit, apply_edits
+from ardi_redact_cli.detection import PLACEHOLDER_PATTERN
+from ardi_redact_cli.redaction import TextUnit, apply_edits
 
 SUPPORTED = frozenset({".txt", ".md", ".srt", ".vtt", ".docx"})
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"

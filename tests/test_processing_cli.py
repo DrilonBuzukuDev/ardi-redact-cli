@@ -6,11 +6,11 @@ import pytest
 from spacy.language import Language
 from typer.testing import CliRunner
 
-from ard_redact_cli import cli, processing
-from ard_redact_cli.detection import Detection, Detector
-from ard_redact_cli.formats import PreparedFile
-from ard_redact_cli.processing import process_file
-from ard_redact_cli.redaction import TextUnit
+from ardi_redact_cli import cli, processing
+from ardi_redact_cli.detection import Detection, Detector
+from ardi_redact_cli.formats import PreparedFile
+from ardi_redact_cli.processing import process_file
+from ardi_redact_cli.redaction import TextUnit
 
 
 def test_dry_run_and_exclusive_output(tmp_path: Path, detector: Detector) -> None:

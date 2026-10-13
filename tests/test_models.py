@@ -3,9 +3,9 @@ from pathlib import Path
 import pytest
 import spacy
 
-from ard_redact_cli.detection import Detector
-from ard_redact_cli.models import MODELS, load_model, model_name
-from ard_redact_cli.processing import process_file
+from ardi_redact_cli.detection import Detector
+from ardi_redact_cli.models import MODELS, load_model, model_name
+from ardi_redact_cli.processing import process_file
 
 
 def test_model_aliases() -> None:

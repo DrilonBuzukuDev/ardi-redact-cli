@@ -2,8 +2,8 @@
 
 Redact direct personal information locally from Word documents, Markdown, plain
 text, and SRT/VTT subtitles. Python 3.12+, uv, and a spaCy model are required.
-The installed command is **`ard-redact`** (without the `i`); the repository and
-distribution are **`ardi-redact-cli`**.
+The installed command is **`ardi-redact`**; the repository and distribution are
+**`ardi-redact-cli`**.
 
 ## Install from GitHub
 
@@ -11,31 +11,29 @@ Replace `USERNAME` with the repository owner:
 
 ```bash
 uv tool install git+https://github.com/USERNAME/ardi-redact-cli.git
-ard-redact --install-model
-ard-redact --help
+ardi-redact --install-model
+ardi-redact --help
 ```
 
 The second command installs `en_core_web_sm` into the tool's Python environment
 using `uv pip`. Installation downloads dependencies/models; redaction itself
 uses no network or external API. Models are explicit downloads so installation
-does not silently contact GitHub during document processing. The repository URL
-must match the actual repository name (use `ard-redact-cli.git` instead if you
-choose that name on GitHub).
+does not silently contact GitHub during document processing.
 
 ## Usage
 
 ```bash
-ard-redact file.docx
-ard-redact notes.md
-ard-redact interview.vtt
-ard-redact subtitles.srt
-ard-redact notes.txt
-ard-redact ./documents --recursive
-ard-redact file.txt --dry-run
-ard-redact file.txt --model en_core_web_sm
-ard-redact file.txt --phone-region AT
-ard-redact file.txt --organizations
-ard-redact file.txt --overwrite
+ardi-redact file.docx
+ardi-redact notes.md
+ardi-redact interview.vtt
+ardi-redact subtitles.srt
+ardi-redact notes.txt
+ardi-redact ./documents --recursive
+ardi-redact file.txt --dry-run
+ardi-redact file.txt --model en_core_web_sm
+ardi-redact file.txt --phone-region AT
+ardi-redact file.txt --organizations
+ardi-redact file.txt --overwrite
 ```
 
 Outputs are adjacent to inputs: `filename.ext` → `filename_pii.ext`. Originals
@@ -58,8 +56,8 @@ if any file fails. `--dry-run` reports counts without writing anything.
 | Italian | `it` | `it_core_news_sm` |
 
 ```bash
-ard-redact --install-model --model de
-ard-redact transcript.docx --model de --phone-region DE
+ardi-redact --install-model --model de
+ardi-redact transcript.docx --model de --phone-region DE
 ```
 
 Each model is installed separately. The installer uses version 3.8.0 of these
@@ -146,7 +144,7 @@ in preserved document parts remains in outputs as described above.
 
 ```bash
 uv sync
-uv run ard-redact --install-model
+uv run ardi-redact --install-model
 uv run ruff check .
 uv run ruff format --check .
 uv run pyright

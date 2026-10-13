@@ -18,13 +18,13 @@ dependencies = [
 ]
 
 [project.scripts]
-ard-redact = "ard_redact_cli.cli:app"
+ardi-redact = "ardi_redact_cli.cli:app"
 
 [dependency-groups]
 dev = ["ruff>=0.12", "pyright>=1.1.400", "pytest>=8", "types-lxml>=2025.3.30"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/ard_redact_cli"]
+packages = ["src/ardi_redact_cli"]
 
 [tool.ruff]
 target-version = "py312"

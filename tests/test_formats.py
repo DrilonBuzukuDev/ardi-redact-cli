@@ -5,9 +5,9 @@ from zipfile import ZipFile
 import pytest
 from docx import Document
 
-from ard_redact_cli.detection import Detector
-from ard_redact_cli.formats import prepare
-from ard_redact_cli.processing import process_file
+from ardi_redact_cli.detection import Detector
+from ardi_redact_cli.formats import prepare
+from ardi_redact_cli.processing import process_file
 
 
 def test_plain_text_preserves_bom_crlf_and_original(tmp_path: Path, detector: Detector) -> None:

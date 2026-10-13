@@ -4,8 +4,8 @@ import pytest
 from spacy.language import Language
 from spacy.tokens import Doc
 
-from ard_redact_cli.detection import Detection, Detector, resolve_overlaps
-from ard_redact_cli.redaction import Redactor, TextUnit
+from ardi_redact_cli.detection import Detection, Detector, resolve_overlaps
+from ardi_redact_cli.redaction import Redactor, TextUnit
 
 
 def test_categories_and_repetition(detector: Detector) -> None:

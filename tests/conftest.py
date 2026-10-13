@@ -5,7 +5,7 @@ import spacy
 from spacy.language import Language
 from spacy.pipeline import EntityRuler
 
-from ard_redact_cli.detection import Detector
+from ardi_redact_cli.detection import Detector
 
 
 @pytest.fixture

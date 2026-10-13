@@ -6,9 +6,9 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
-from ard_redact_cli.detection import Detector
-from ard_redact_cli.formats import prepare
-from ard_redact_cli.redaction import Redactor
+from ardi_redact_cli.detection import Detector
+from ardi_redact_cli.formats import prepare
+from ardi_redact_cli.redaction import Redactor
 
 
 @dataclass(frozen=True)
@@ -40,7 +40,7 @@ def process_file(
     )
   ]
   if not dry_run:
-    descriptor, temporary = tempfile.mkstemp(prefix=".ard-redact-", dir=path.parent)
+    descriptor, temporary = tempfile.mkstemp(prefix=".ardi-redact-", dir=path.parent)
     try:
       with os.fdopen(descriptor, "wb") as stream:
         prepared.write(edits, stream)
