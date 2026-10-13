@@ -8,10 +8,27 @@ import typer
 
 from ardi_redact_cli.detection import Detector
 from ardi_redact_cli.formats import SUPPORTED
-from ardi_redact_cli.models import install_model, load_model
+from ardi_redact_cli.models import LANGUAGES, MODELS, install_model, load_model, model_name
 from ardi_redact_cli.processing import process_file
 
 app = typer.Typer(add_completion=False, pretty_exceptions_enable=False)
+
+
+def setup_languages() -> None:
+  typer.echo("Choose language support. Each selected language downloads a medium (md) model.")
+  selected = [
+    language
+    for language in LANGUAGES
+    if typer.confirm(f"Install {language.title()} support?", default=language == "english")
+  ]
+  for language in selected:
+    typer.echo(f"Installing {language.title()} support...")
+    install_model(language)
+    typer.echo(
+      f"{language.title()} support installed. Redact with ardi-redact <path> in {language}."
+    )
+  if not selected:
+    typer.echo("No languages selected. Add one later with ardi-redact use <language>.")
 
 
 def discover(path: Path, recursive: bool) -> list[Path]:
@@ -37,12 +54,25 @@ def discover(path: Path, recursive: bool) -> list[Path]:
 
 @app.command()
 def main(
-  path: Annotated[Path | None, typer.Argument(help="File or directory to redact.")] = None,
+  path: Annotated[
+    Path | None,
+    typer.Argument(help="File/directory to redact [in <language>], `setup`, or `use <language>`."),
+  ] = None,
+  qualifier: Annotated[
+    str | None,
+    typer.Argument(help="`in` before the redaction language, or language after `use`."),
+  ] = None,
+  language: Annotated[
+    str | None,
+    typer.Argument(
+      help="Language after `in`: english (default), german, spanish, french, italian (or codes)."
+    ),
+  ] = None,
   recursive: Annotated[bool, typer.Option(help="Include subdirectories.")] = False,
   dry_run: Annotated[bool, typer.Option(help="Report counts without writing files.")] = False,
   model: Annotated[
-    str, typer.Option(help="spaCy model or language: en, de, es, fr, it.")
-  ] = "en_core_web_sm",
+    str | None, typer.Option(help="Advanced: select an installed medium/larger spaCy pipeline.")
+  ] = None,
   phone_region: Annotated[
     str, typer.Option(help="ISO country code for national phone numbers.")
   ] = "AT",
@@ -60,12 +90,31 @@ def main(
 ) -> None:
   """Redact PII locally, keeping originals and document structure intact."""
   try:
+    if path == Path("use"):
+      if language is not None:
+        raise ValueError("Use ardi-redact use <language>.")
+      if qualifier is None:
+        raise ValueError("Choose a language: english, german, spanish, french, or italian.")
+      install_model(qualifier)
+      typer.echo(f"Model for {qualifier} installed ({model_name(qualifier)}).")
+      typer.echo(f"Redact with ardi-redact <path> in {qualifier}.")
+      return
+    if qualifier is not None:
+      if qualifier != "in" or language is None or path is None or path == Path("setup") or install:
+        raise ValueError("Use ardi-redact <path> in <language>.")
+      if model is not None:
+        raise ValueError("Choose either `in <language>` or --model.")
+      if model_name(language) not in MODELS.values():
+        raise ValueError("Choose a language: english, german, spanish, french, or italian.")
+      model = language
+    model = model or "english"
     if install:
       install_model(model)
       typer.echo("Model installed.")
       return
-    if path is None:
-      raise ValueError("Provide a file/directory, or use --install-model.")
+    if path is None or path == Path("setup"):
+      setup_languages()
+      return
     paths = discover(path, recursive)
     if not paths:
       raise ValueError("No supported input files found.")

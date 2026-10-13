@@ -7,18 +7,21 @@ The installed command is **`ardi-redact`**; the repository and distribution are
 
 ## Install from GitHub
 
-Replace `USERNAME` with the repository owner:
-
 ```bash
-uv tool install git+https://github.com/USERNAME/ardi-redact-cli.git
-ardi-redact --install-model
+uv tool install git+https://github.com/drita-labs/ardi-redact-cli.git && ardi-redact setup
 ardi-redact --help
 ```
 
-The second command installs `en_core_web_sm` into the tool's Python environment
-using `uv pip`. Installation downloads dependencies/models; redaction itself
-uses no network or external API. Models are explicit downloads so installation
-does not silently contact GitHub during document processing.
+Setup asks whether to install **English, German, Spanish, French, and Italian**
+support. English defaults to yes; the others default to no. Answer `y` or `n`
+for each language. Only selected models are downloaded, always medium (`md`),
+never small (`sm`). You can rerun `ardi-redact setup` at any time; running
+`ardi-redact` without arguments also opens setup.
+
+`uv tool install` installs the command; the chained `ardi-redact setup` runs the
+interactive questions once installation succeeds. Model installation uses
+`uv pip` in the tool's Python environment. Installation downloads dependencies
+and models; redaction itself uses no network or external API.
 
 ## Usage
 
@@ -30,7 +33,7 @@ ardi-redact subtitles.srt
 ardi-redact notes.txt
 ardi-redact ./documents --recursive
 ardi-redact file.txt --dry-run
-ardi-redact file.txt --model en_core_web_sm
+ardi-redact file.txt in english
 ardi-redact file.txt --phone-region AT
 ardi-redact file.txt --organizations
 ardi-redact file.txt --overwrite
@@ -47,37 +50,48 @@ if any file fails. `--dry-run` reports counts without writing anything.
 
 ### Languages
 
-| Language | Alias | Small model |
-| --- | --- | --- |
-| English (default) | `en` | `en_core_web_sm` |
-| German | `de` | `de_core_news_sm` |
-| Spanish | `es` | `es_core_news_sm` |
-| French | `fr` | `fr_core_news_sm` |
-| Italian | `it` | `it_core_news_sm` |
+| Language          | Alias | Medium model       |
+| ----------------- | ----- | ----------------- |
+| English (default) | `en`  | `en_core_web_md`  |
+| German            | `de`  | `de_core_news_md` |
+| Spanish           | `es`  | `es_core_news_md` |
+| French            | `fr`  | `fr_core_news_md` |
+| Italian           | `it`  | `it_core_news_md` |
 
 ```bash
-ardi-redact --install-model --model de
-ardi-redact transcript.docx --model de --phone-region DE
+ardi-redact use german
+ardi-redact use french
+ardi-redact use italian
+ardi-redact transcript.docx in german --phone-region DE
 ```
 
+Use `ardi-redact use english`, `german`, `spanish`, `french`, or `italian` to
+add a language later. Language names are case insensitive; codes `en`, `de`,
+`es`, `fr`, and `it` work too. `use` installs support; choose the language for
+redaction with `ardi-redact <path> in german` (English is the default). There is no automatic
+language detection or persistent language switch.
+
+The equivalent option form is `ardi-redact --install-model --model german`.
 Each model is installed separately. The installer uses version 3.8.0 of these
 pipelines, compatible with the required spaCy 3.8 series. `--model` also accepts
-an already installed compatible spaCy model or a local pipeline directory.
+an already installed compatible medium or larger spaCy model or a local pipeline
+directory. Small (`sm`) models are rejected, including when explicitly requested.
+Missing models report the appropriate `ardi-redact use <language>` command.
 `--phone-region` defaults to `AT` and controls interpretation of national phone
 numbers independently of the model language. International numbers are detected
 using their country code.
 
 ### Detection and placeholders
 
-| Category | Detection |
-| --- | --- |
-| `PERSON` | spaCy `PERSON` / multilingual `PER` |
-| `LOCATION` | spaCy `GPE`, `LOC`, `FAC` |
-| `EMAIL` | spaCy `token.like_email` |
-| `PHONE` | phonenumbers valid-number matching |
-| `GPS` | Decimal latitude/longitude pairs, comma or semicolon separated; validated to ±90/±180 |
-| `DATE` | spaCy `DATE`, enabled by default |
-| `ORG` | spaCy `ORG`, only with `--organizations` |
+| Category   | Detection                                                                             |
+| ---------- | ------------------------------------------------------------------------------------- |
+| `PERSON`   | spaCy `PERSON` / multilingual `PER`                                                   |
+| `LOCATION` | spaCy `GPE`, `LOC`, `FAC`                                                             |
+| `EMAIL`    | spaCy `token.like_email`                                                              |
+| `PHONE`    | phonenumbers valid-number matching                                                    |
+| `GPS`      | Decimal latitude/longitude pairs, comma or semicolon separated; validated to ±90/±180 |
+| `DATE`     | spaCy `DATE`, enabled by default                                                      |
+| `ORG`      | spaCy `ORG`, only with `--organizations`                                              |
 
 ```text
 John Smith lives in Vienna.
@@ -144,7 +158,7 @@ in preserved document parts remains in outputs as described above.
 
 ```bash
 uv sync
-uv run ardi-redact --install-model
+uv run ardi-redact setup
 uv run ruff check .
 uv run ruff format --check .
 uv run pyright
