@@ -8,7 +8,7 @@ The installed command is **`ardi-redact`**; the repository and distribution are
 ## Install from GitHub
 
 ```bash
-uv tool install git+https://github.com/drita-labs/ardi-redact-cli.git && ardi-redact setup
+uv tool install git+https://github.com/DrilonBuzukuDev/ardi-redact-cli.git && ardi-redact setup
 ardi-redact --help
 ```
 
